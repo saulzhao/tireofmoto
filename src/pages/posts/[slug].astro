@@ -1,0 +1,26 @@
+---
+import PostLayout from "../../layouts/PostLayout.astro";
+
+export async function getStaticPaths() {
+  const modules = import.meta.glob("../../content/posts/*.md");
+  return Object.keys(modules).map((path) => {
+    const slug = path.split("/").pop()?.replace(".md", "") ?? "";
+    return { params: { slug } };
+  });
+}
+
+const { slug } = Astro.params;
+
+const modules = import.meta.glob("../../content/posts/*.md");
+const load = modules[`../../content/posts/${slug}.md`];
+if (!load) {
+  throw new Error(`Post not found: ${slug}`);
+}
+
+const mod = await load();
+const Content = mod.default;
+const frontmatter = mod.frontmatter;
+---
+<PostLayout frontmatter={frontmatter}>
+  <Content />
+</PostLayout>

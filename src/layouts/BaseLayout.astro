@@ -1,0 +1,79 @@
+---
+const siteName = "Tire of Moto";
+const siteDesc =
+  "Motorcycle tires & inner tubes blog: sizes, valves, fitment, buying guides, maintenance tips.";
+
+const title = Astro.props?.title ? `${Astro.props.title} | ${siteName}` : siteName;
+const description = Astro.props?.description ?? siteDesc;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" />
+
+    <style is:global>
+      :root{
+        --bg:#0b0f17;
+        --card:#111827;
+        --text:#e5e7eb;
+        --muted:#9ca3af;
+        --brand:#22c55e;
+        --line:#1f2937;
+      }
+      *{box-sizing:border-box}
+      html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Noto Sans","Apple Color Emoji","Segoe UI Emoji"}
+      a{color:inherit;text-decoration:none}
+      a:hover{color:var(--brand)}
+      .container{max-width:1040px;margin:0 auto;padding:24px}
+      .nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--line)}
+      .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.2px}
+      .badge{font-size:12px;color:var(--bg);background:var(--brand);padding:2px 8px;border-radius:999px}
+      .menu{display:flex;gap:14px;color:var(--muted)}
+      .hero{padding:28px 0 10px}
+      .hero h1{font-size:36px;line-height:1.15;margin:0}
+      .hero p{color:var(--muted);max-width:70ch}
+      .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+      .card{grid-column:span 6;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
+      @media (max-width:860px){.card{grid-column:span 12}}
+      .meta{color:var(--muted);font-size:13px;display:flex;gap:10px;flex-wrap:wrap}
+      .tag{display:inline-block;border:1px solid var(--line);color:var(--muted);padding:2px 10px;border-radius:999px;font-size:12px}
+      hr{border:none;border-top:1px solid var(--line);margin:24px 0}
+      footer{color:var(--muted);font-size:13px;padding:26px 0;border-top:1px solid var(--line);margin-top:28px}
+      article{max-width:78ch}
+      article h1{font-size:34px;margin:10px 0}
+      article h2{margin-top:26px}
+      article p,article li{color:#d1d5db;line-height:1.8}
+      code,pre{background:#0a1220;border:1px solid var(--line);border-radius:12px}
+      pre{padding:14px;overflow:auto}
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <header class="nav">
+        <a class="brand" href="/">
+          <span>🛞</span>
+          <span>Tire of Moto</span>
+          <span class="badge">BLOG</span>
+        </a>
+        <nav class="menu">
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/rss.xml">RSS</a>
+        </nav>
+      </header>
+
+      <main>
+        <slot />
+      </main>
+
+      <footer>
+        © {new Date().getFullYear()} Tire of Moto · <a href="/sitemap.xml">Sitemap</a>
+      </footer>
+    </div>
+  </body>
+</html>

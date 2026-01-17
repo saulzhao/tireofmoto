@@ -1,0 +1,48 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const modules = import.meta.glob("../content/posts/*.md", { eager: true });
+
+const posts = Object.entries(modules)
+  .map(([path, mod]) => {
+    const slug = path.split("/").pop().replace(".md", "");
+    const fm = mod.frontmatter ?? {};
+    return {
+      slug,
+      frontmatter: {
+        ...fm,
+        pubDate: String(fm.pubDate ?? "").slice(0, 10),
+      },
+    };
+  })
+  .sort((a, b) => (String(b.frontmatter.pubDate) > String(a.frontmatter.pubDate) ? 1 : -1));
+---
+
+<BaseLayout title="Home">
+  <section class="hero">
+    <h1>Motorcycle Tires & Inner Tubes</h1>
+    <p>
+      Practical articles about tire sizes, tube valves (TR4/TR13/AV), fitment, installation, puncture prevention,
+      and selection for commuting / off-road / racing.
+    </p>
+   
+  </section>
+
+  <section class="grid">
+    {posts.map((p) => (
+      <a class="card" href={`/posts/${p.slug}`}>
+        <div class="meta">
+          <span>{p.frontmatter.pubDate}</span>
+          {(p.frontmatter.tags || []).slice(0, 4).map((t) => <span class="tag">#{t}</span>)}
+        </div>
+        <h2 style="margin:10px 0 6px">
+  			{p.frontmatter.title ?? "(NO TITLE)"} 
+		</h2>
+		<p style="margin:0;color:var(--muted)">
+  			{p.frontmatter.description ?? "(NO DESCRIPTION)"}
+		</p>
+
+      </a>
+    ))}
+  </section>
+</BaseLayout>

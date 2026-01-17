@@ -1,0 +1,21 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+const { frontmatter } = Astro.props;
+
+const title = frontmatter?.title ?? "";
+const description = frontmatter?.description ?? "";
+const pubDate = String(frontmatter?.pubDate ?? "").slice(0, 10);
+const tags = frontmatter?.tags ?? [];
+---
+<BaseLayout title={title} description={description}>
+  <article>
+    <div class="meta">
+      <span>{pubDate}</span>
+      {tags.map((t) => (
+        <a class="tag" href={`/tags/${encodeURIComponent(t)}`}>#{t}</a>
+      ))}
+    </div>
+    <h1>{title}</h1>
+    <slot />
+  </article>
+</BaseLayout>

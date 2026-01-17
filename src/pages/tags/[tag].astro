@@ -1,0 +1,43 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const modules = import.meta.glob("../../content/posts/*.md", { eager: true });
+
+const allPosts = Object.entries(modules).map(([path, mod]) => {
+  const slug = path.split("/").pop().replace(".md", "");
+  const fm = mod.frontmatter ?? {};
+  const pub = String(fm.pubDate ?? "").slice(0, 10);
+  const tags = (fm.tags ?? []).map(String);
+  return { slug, frontmatter: { ...fm, pubDate: pub, tags } };
+});
+
+export async function getStaticPaths() {
+  const tagSet = new Set();
+  for (const p of allPosts) for (const t of (p.frontmatter.tags || [])) tagSet.add(t);
+  return [...tagSet].map((tag) => ({ params: { tag: encodeURIComponent(tag) } }));
+}
+
+const tag = decodeURIComponent(Astro.params.tag);
+const posts = allPosts
+  .filter((p) => (p.frontmatter.tags || []).includes(tag))
+  .sort((a, b) => (String(b.frontmatter.pubDate) > String(a.frontmatter.pubDate) ? 1 : -1));
+---
+
+<BaseLayout title={`Tag: ${tag}`} description={`Articles tagged with ${tag}`}>
+  <section class="hero">
+    <h1>Tag: #{tag}</h1>
+    <p>Articles related to {tag}.</p>
+  </section>
+
+  <section class="grid">
+    {posts.map((p) => (
+      <a class="card" href={`/posts/${p.slug}`}>
+        <div class="meta">
+          <span>{p.frontmatter.pubDate}</span>
+        </div>
+        <h2 style="margin:10px 0 6px">{p.frontmatter.title}</h2>
+        <p style="margin:0;color:var(--muted)">{p.frontmatter.description}</p>
+      </a>
+    ))}
+  </section>
+</BaseLayout>
