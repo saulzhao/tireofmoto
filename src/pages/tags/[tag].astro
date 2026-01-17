@@ -1,24 +1,36 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
-const modules = import.meta.glob("../../content/posts/*.md", { eager: true });
-
-const allPosts = Object.entries(modules).map(([path, mod]) => {
-  const slug = path.split("/").pop().replace(".md", "");
-  const fm = mod.frontmatter ?? {};
-  const pub = String(fm.pubDate ?? "").slice(0, 10);
-  const tags = (fm.tags ?? []).map(String);
-  return { slug, frontmatter: { ...fm, pubDate: pub, tags } };
-});
-
 export async function getStaticPaths() {
+  const modules = import.meta.glob("../../content/posts/*.md", { eager: true });
+
   const tagSet = new Set();
-  for (const p of allPosts) for (const t of (p.frontmatter.tags || [])) tagSet.add(t);
+  for (const mod of Object.values(modules)) {
+    const tags = (mod.frontmatter?.tags ?? []).map(String);
+    for (const t of tags) tagSet.add(t);
+  }
+
   return [...tagSet].map((tag) => ({ params: { tag: encodeURIComponent(tag) } }));
 }
 
 const tag = decodeURIComponent(Astro.params.tag);
-const posts = allPosts
+
+const modules = import.meta.glob("../../content/posts/*.md", { eager: true });
+
+const posts = Object.entries(modules)
+  .map(([path, mod]) => {
+    const slug = path.split("/").pop().replace(".md", "");
+    const fm = mod.frontmatter ?? {};
+    const tags = (fm.tags ?? []).map(String);
+    return {
+      slug,
+      frontmatter: {
+        ...fm,
+        pubDate: String(fm.pubDate ?? "").slice(0, 10),
+        tags,
+      },
+    };
+  })
   .filter((p) => (p.frontmatter.tags || []).includes(tag))
   .sort((a, b) => (String(b.frontmatter.pubDate) > String(a.frontmatter.pubDate) ? 1 : -1));
 ---
