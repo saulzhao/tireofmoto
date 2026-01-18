@@ -60,11 +60,22 @@ const description = Astro.props?.description ?? siteDesc;
           <span>Tire of Moto</span>
           <span class="badge">BLOG</span>
         </a>
-        <nav class="menu">
-          <a href="/">Home</a>
-          <a href="/about">About</a>
-          <a href="/rss.xml">RSS</a>
+        <nav class="menu" style="align-items:center">
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/tags">Tags</a>
+            <a href="/contact">Contact</a>
+            <a href="/rss.xml">RSS</a>
+
+            <form action="/search" method="get" style="margin-left:14px">
+                <input
+      name="q"
+      placeholder="Search…"
+      style="padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:#0a1220;color:var(--text);width:180px"
+                />
+            </form>
         </nav>
+
       </header>
 
       <main>

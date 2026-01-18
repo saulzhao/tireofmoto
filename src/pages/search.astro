@@ -1,0 +1,71 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+const q = (Astro.url.searchParams.get("q") ?? "").trim();
+---
+
+<BaseLayout title="Search" description="Search posts">
+  <section class="hero">
+    <h1>Search</h1>
+    <p class="meta">Type keywords to search titles, descriptions, and tags.</p>
+
+    <form action="/search" method="get" style="margin-top:12px">
+      <input
+        id="q"
+        name="q"
+        value={q}
+        placeholder="Search…"
+        style="padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:#0a1220;color:var(--text);width:min(520px, 100%)"
+      />
+    </form>
+  </section>
+
+  <section class="grid" id="results"></section>
+
+  <script>
+    async function run() {
+      const params = new URLSearchParams(location.search);
+      const q = (params.get("q") || "").trim().toLowerCase();
+      const el = document.getElementById("results");
+      if (!el) return;
+
+      const res = await fetch("/search.json");
+      const items = await res.json();
+
+      const filtered = q
+        ? items.filter((p) => {
+            const hay = [
+              p.title,
+              p.description,
+              (p.tags || []).join(" "),
+              p.slug,
+            ]
+              .join(" ")
+              .toLowerCase();
+            return hay.includes(q);
+          })
+        : items;
+
+      filtered.sort((a, b) => (b.pubDate > a.pubDate ? 1 : -1));
+
+      el.innerHTML = filtered
+        .map(
+          (p) => `
+          <a class="card" href="/posts/${p.slug}">
+            <div class="meta">
+              <span>${p.pubDate || ""}</span>
+              ${(p.tags || []).slice(0, 4).map((t) => `<span class="tag">#${t}</span>`).join("")}
+            </div>
+            <h2 style="margin:10px 0 6px">${p.title || "(No title)"}</h2>
+            <p style="margin:0;color:var(--muted)">${p.description || ""}</p>
+          </a>
+        `
+        )
+        .join("");
+
+      if (!filtered.length) {
+        el.innerHTML = `<div class="card" style="grid-column: span 12"><p class="meta" style="margin:0">No results.</p></div>`;
+      }
+    }
+    run();
+  </script>
+</BaseLayout>
