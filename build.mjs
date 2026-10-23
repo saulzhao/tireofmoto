@@ -4,6 +4,7 @@ import { cpSync, mkdirSync, readdirSync, rmSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 const ENTRIES = [
+  '404.html',
   '_redirects',
   '_astro',
   'about',
