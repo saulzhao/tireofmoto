@@ -4,7 +4,7 @@
 // timezone never matters again. It is idempotent: run it after adding posts.
 //
 //   node scripts/fix-dates.mjs
-import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -41,6 +41,29 @@ for (const dir of readdirSync(join(ROOT, 'posts'))) {
   if (next !== html) writeFileSync(file, next);
 }
 
+// Home and tag listings show ISO dates (and tag pages often carry a year-only
+// datetime attribute). Rewrite both text and attribute from the post slug.
+let listFixed = 0;
+const listFiles = ['index.html', 'tags/index.html'];
+for (const tag of readdirSync(join(ROOT, 'tags'))) {
+  if (existsSync(join(ROOT, 'tags', tag, 'index.html'))) listFiles.push(`tags/${tag}/index.html`);
+}
+for (const rel of listFiles) {
+  const file = join(ROOT, rel);
+  let html = readFileSync(file, 'utf8');
+  const next = html.replace(/<article class="post-card">[\s\S]*?<\/article>/g, (block) => {
+    const href = block.match(/href="\/posts\/(\d{4}-\d{2}-\d{2})-/);
+    if (!href) return block;
+    const iso = href[1];
+    const want = `<time datetime="${iso}">${longDate(iso)}</time>`;
+    return block.replace(/<time datetime="[^"]*">[^<]*<\/time>/g, () => {
+      listFixed += 1;
+      return want;
+    });
+  });
+  if (next !== html) writeFileSync(file, next);
+}
+
 let rssFixed = 0;
 const rssPath = join(ROOT, 'rss.xml');
 let rss = readFileSync(rssPath, 'utf8');
@@ -73,5 +96,6 @@ for (const entry of search) {
 writeFileSync(searchPath, JSON.stringify(search, null, 2) + '\n');
 
 console.log(`posts <time> fixed: ${timeFixed}`);
+console.log(`list <time> fixed: ${listFixed}`);
 console.log(`rss pubDate fixed: ${rssFixed}`);
 console.log(`search.json dates fixed: ${searchFixed}`);
