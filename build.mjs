@@ -2,6 +2,7 @@
 // 只复制下面白名单里的条目，仓库里其它文件（脚本、模板、开发用页面）不会进发布目录。
 import { cpSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { normalizeNavbar } from './scripts/normalize-navbar-logo.mjs';
 
 const ENTRIES = [
   '404.html',
@@ -89,6 +90,8 @@ function ensureIcons(dir) {
 let iconsAdded = 0;
 ensureIcons(join(process.cwd(), 'dist'));
 
+const navLogo = normalizeNavbar(join(process.cwd(), 'dist'));
+
 walk('dist');
 
-console.log(`dist: ${files} files, ${(bytes / 1048576).toFixed(1)} MB, icon links added to ${iconsAdded} pages`);
+console.log(`dist: ${files} files, ${(bytes / 1048576).toFixed(1)} MB, icon links added to ${iconsAdded} pages, navbar logo normalized on ${navLogo.changed} blocks`);
