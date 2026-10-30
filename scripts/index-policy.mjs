@@ -120,7 +120,7 @@ for (const tag of policy.tags.noindex) {
   setRobots(file, NOINDEX_ROBOTS);
 }
 const tagsOverview = join(ROOT, 'tags/index.html');
-setRobots(tagsOverview, INDEX_ROBOTS);
+setRobots(tagsOverview, NOINDEX_ROBOTS);
 setDescription(tagsOverview, policy.tags.overview.description);
 if (policy.tags.overview.description.length < 140 || policy.tags.overview.description.length > 160) {
   fail(`/tags/ 的 description 是 ${policy.tags.overview.description.length} 字符，应为 140–160`);
@@ -186,13 +186,18 @@ const sitemap = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www
 // ---- 5. search.json ----
 const searchPath = join(ROOT, 'search.json');
 const search = JSON.parse(readFileSync(searchPath, 'utf8'));
+// 站内搜索要覆盖所有还能直接打开的车型页；只有 merge 来源（301）和旧 legacyNoindex 不进。
+const searchable = new Set([
+  ...editorial,
+  ...[...models.values()].filter((m) => m.status !== 'merge').map((m) => m.slug),
+]);
 const kept = [];
 for (const item of search) {
-  if (!editorial.has(item.slug)) continue;
+  if (!searchable.has(item.slug)) continue;
   kept.push(item);
 }
 const keptSlugs = new Set(kept.map((i) => i.slug));
-for (const slug of editorial) {
+for (const slug of searchable) {
   if (keptSlugs.has(slug)) continue;
   const meta = metaOf(postFile(slug));
   kept.push({ slug, title: meta.title, date: meta.date, description: meta.description, pubDate: meta.date, tags: [] });
@@ -252,8 +257,19 @@ for (const m of policy.models) {
   if (target && !['keep', 'indexed'].includes(target.status)) fail(`合并目标 ${targetSlug} 的状态是 ${target.status}，应保留`);
   if (!re.test(redirects) && matches.length === 1) fail(`合并页 ${m.slug} 的 301 行格式不对`);
 }
-for (const item of kept) {
-  if (models.has(item.slug)) fail(`search.json 里还有车型页：${item.slug}`);
+const searchSlugs = new Set(kept.map((i) => i.slug));
+for (const slug of editorial) {
+  if (!searchSlugs.has(slug)) fail(`search.json 少了编辑文章：${slug}`);
+}
+for (const m of models.values()) {
+  if (m.status === 'merge') {
+    if (searchSlugs.has(m.slug)) fail(`search.json 里不该有合并来源（301 页）：${m.slug}`);
+  } else if (!searchSlugs.has(m.slug)) {
+    fail(`search.json 少了车型页：${m.slug}（status=${m.status}）`);
+  }
+}
+for (const slug of legacy) {
+  if (searchSlugs.has(slug)) fail(`search.json 里不该有旧 noindex 页：${slug}`);
 }
 for (const item of newRss.matchAll(/<item>[\s\S]*?<\/item>/g)) {
   const link = (item[0].match(/<link>([^<]+)<\/link>/) || [])[1] || '';
