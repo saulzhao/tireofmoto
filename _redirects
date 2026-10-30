@@ -6,4 +6,22 @@ https://www.tireofmoto.com/* https://tireofmoto.com/:splat 301
 /posts/2026-03-13-z1000sx-2020-2025/ /posts/2026-04-15-ninja-1000sx-ex1000-2020-2025/ 301
 /posts/2026-04-15-forza-350-scooter-2018-202512070-r1514070-r14/ /posts/2026-06-16-honda-forza-350/ 301
 
+# 289：合并的旧车型页（来源页保留，301 到现行详细页）
+/posts/2026-02-10-yamaha-yzf-r6/ https://tireofmoto.com/posts/2026-05-03-yzf-r6-2006-202012070-zr1718055-zr17/ 301
+/posts/2026-02-11-honda-cbr300r/ https://tireofmoto.com/posts/2026-05-18-cbr300r-2014-201811070-1714070-17/ 301
+/posts/2026-02-12-honda-cbr1000rr-r-fireblade/ https://tireofmoto.com/posts/2026-04-04-cbr1000rr-r-2020-202512070-zr1720055-zr17/ 301
+/posts/2026-02-13-honda-cbr650r/ https://tireofmoto.com/posts/2026-04-11-cb650r-2019-202512070-zr1718055-zr17/ 301
+/posts/2026-02-14-honda-gold-wing-gl1800/ https://tireofmoto.com/posts/2026-04-09-gold-wing-gl1800-2018-202513060-r1820050-r16/ 301
+/posts/2026-02-15-honda-africa-twin-crf1100l/ https://tireofmoto.com/posts/2026-04-06-africa-twin-crf1100l-2018-20259090-2115070-r18/ 301
+/posts/2026-02-17-honda-rebel-1100-dct/ https://tireofmoto.com/posts/2026-04-08-rebel-1100-dct-2022-202513090b1618065-b16/ 301
+/posts/2026-03-07-honda-nc750x-dct/ https://tireofmoto.com/posts/2026-04-05-nc750x-dct-2016-202512070-r1717060-r15/ 301
+/posts/2026-03-09-yamaha-mt-10-xsr900-gp/ https://tireofmoto.com/posts/2026-06-06-mt-10-2016-202512070-zr1719055-zr17/ 301
+/posts/2026-03-10-yamaha-fjr1300es-a/ https://tireofmoto.com/posts/2026-06-10-fjr1300es-2001-202412070-r1818055-r17/ 301
+/posts/2026-03-11-yamaha-tenere-700-world-raid/ https://tireofmoto.com/posts/2026-06-09-tenere-700-world-raid-2019-20259090-2115070-r18/ 301
+/posts/2026-03-19-kawasaki-ninja-400-zx-400/ https://tireofmoto.com/posts/2026-05-21-ninja-400-zx-400-2018-202511070-1714070-17/ 301
+/posts/2026-03-21-kawasaki-versys-650/ https://tireofmoto.com/posts/2026-05-26-versys-650-2015-202411080-r1915070-r17/ 301
+/posts/2026-05-20-yamaha-xsr700-mt-07/ https://tireofmoto.com/posts/2026-06-05-mt-07-fz-07-2014-202512070-zr1718055-zr17/ 301
+/posts/2026-05-21-yamaha-tracer-900-9gt/ https://tireofmoto.com/posts/2026-06-08-tracer-700-900-9gt-2015-202412070-r1718055-r17/ 301
+/posts/2026-05-26-g310r-all-years/ https://tireofmoto.com/posts/2026-03-24-bmw-g310r-g310gs/ 301
+
 /* /404.html 404

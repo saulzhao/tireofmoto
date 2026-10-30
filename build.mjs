@@ -2,6 +2,7 @@
 // 只复制下面白名单里的条目，仓库里其它文件（脚本、模板、开发用页面）不会进发布目录。
 import { cpSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { execFileSync } from 'node:child_process';
 import { normalizeNavbar } from './scripts/normalize-navbar.mjs';
 
 const ENTRIES = [
@@ -37,6 +38,9 @@ const ENTRIES = [
 
 rmSync('dist', { recursive: true, force: true });
 mkdirSync('dist', { recursive: true });
+
+// 索引白名单：改 robots、重建 sitemap/search/RSS，并校验（失败就直接中断构建）。
+execFileSync(process.execPath, ['scripts/index-policy.mjs'], { stdio: 'inherit' });
 
 for (const entry of ENTRIES) {
   cpSync(entry, join('dist', entry), { recursive: true });
