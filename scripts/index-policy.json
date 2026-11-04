@@ -1,6 +1,6 @@
 {
  "$comment": "tireofmoto 索引白名单。status: noindex=永久不索引, keep=保留待补厚(暂不索引), merge=301到canonical, indexed=已补厚复核通过(恢复索引并进 sitemap)。编辑型文章不在此列表，构建时按“posts 目录里除模型页和旧 noindex 页之外的都算编辑型”自动收录。",
- "updated": "2026-10-30",
+ "updated": "2026-11-04",
  "base": [
   {
    "url": "https://tireofmoto.com/",
@@ -479,7 +479,7 @@
    "status": "keep",
    "code": "K1",
    "canonical": null,
-   "lastReviewed": null,
+   "lastReviewed": "2026-11-04",
    "sourceCount": 0
   },
   {
@@ -488,7 +488,7 @@
    "status": "keep",
    "code": "K1",
    "canonical": null,
-   "lastReviewed": null,
+   "lastReviewed": "2026-11-04",
    "sourceCount": 0
   },
   {
@@ -839,7 +839,7 @@
    "status": "keep",
    "code": "K1",
    "canonical": null,
-   "lastReviewed": null,
+   "lastReviewed": "2026-11-04",
    "sourceCount": 0
   },
   {
@@ -848,7 +848,7 @@
    "status": "keep",
    "code": "K1",
    "canonical": null,
-   "lastReviewed": null,
+   "lastReviewed": "2026-11-04",
    "sourceCount": 0
   },
   {
