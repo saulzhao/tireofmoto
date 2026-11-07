@@ -84,6 +84,8 @@ function getRobots(file) {
 
 function pageLastmod(file) {
   const html = readFileSync(file, 'utf8');
+  const ld = html.match(/"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"/);
+  if (ld) return ld[1];
   const m = html.match(/<time datetime="(\d{4}-\d{2}-\d{2})"/);
   if (m) return m[1];
   return new Date(statSync(file).mtimeMs).toISOString().slice(0, 10);

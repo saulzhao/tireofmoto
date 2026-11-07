@@ -24,6 +24,7 @@ const ENTRIES = [
   'posts',
   'privacy-policy',
   'robots.txt',
+  'tomindexnow2026.txt',
   'rss.xml',
   'search',
   'search.json',
